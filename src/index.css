@@ -1,0 +1,97 @@
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+}
+
+.game_zone {
+    margin-left: 20%;
+    margin-top: 5%;
+    display: grid;
+    grid-template-columns: repeat(29, 30px);
+    grid-template-rows: repeat(21, 30px);
+    gap: 1px;
+}
+.row {
+    display: contents;
+}
+
+.cell{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("./medievalTile_57.png");
+    background-size: cover;
+}
+
+
+.plus{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 25px;
+    background: #00a8ff;
+}
+
+.buildings{
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
+}
+
+.building{
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin: 5px;
+    margin-right: 0;
+    bottom: 70px;
+    flex-direction: column;
+    font-size: 15px;
+    background: #00a8ff;
+}
+
+.multiplicator{
+    cursor: pointer;
+    background: #08b5ec !important;
+    margin-right: 50px !important;
+}
+
+.img__building{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.build-modal{
+    border-radius: 10px;
+    background: #707070;
+    padding: 10px;
+    position: absolute;
+}
+
+ul{
+    padding: 0;
+    list-style: none;
+}
+li{
+    cursor: pointer;
+    background: #1555d8;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
