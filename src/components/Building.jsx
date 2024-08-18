@@ -39,8 +39,9 @@ export const Building = ({ building }) => {
         clearTimeout(loop);
       };
     }, [ticksBeforeUpdate, setTicksBeforeUpdate, generateResourcesTicks])
-    return <div style={{position:'relative'}}>
+    return <div style={{position:'relative'}} className="img__building">
         <img src={currentBuilding.image} alt={currentBuilding.name} className={'img__building'}/>
+        <span className="center"></span>
         {showDebugTicks && (
           <span style={{position: 'absolute', fontSize: '12px', top: '0', left: '0'}}>{ticksBeforeUpdate}</span>
         )}

@@ -46,8 +46,3 @@ button{
     background: none !important;
     margin-left: 25px;
 }
-.monster{
-    background: url('./monster.png');
-    background-size: contain;
-    background-color: #27ad5f;
-}

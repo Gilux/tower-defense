@@ -9,13 +9,58 @@
 }
 
 .game_zone {
-    margin-left: 20%;
-    margin-top: 5%;
+    width: 870px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game_zone .grid {
     display: grid;
     grid-template-columns: repeat(29, 30px);
     grid-template-rows: repeat(21, 30px);
-    gap: 1px;
 }
+
+.cell {
+    border: 1px solid rgb(101, 186, 101);
+}
+
+.cell:hover {
+    border-color: lightgreen;
+}
+
+.game_zone {
+    position: relative;
+}
+
+.monsters {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.monster{
+    background: url('./monster.png');
+    background-size: 70% 70%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: transparent;
+    border-radius: 100px;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 100px;
+}
+
+.monster.attacking {
+    background-color: #f00;
+}
+
 .row {
     display: contents;
 }
@@ -75,6 +120,13 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.img__building .center {
+
+        width: 1px;
+        height: 1px;
+        box-shadow: -15px 0px 40px 80px rgba(162, 54, 11, 0.26);
 }
 
 .build-modal{
