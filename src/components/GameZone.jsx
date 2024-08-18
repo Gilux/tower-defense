@@ -1,9 +1,11 @@
-import {useEffect, useState} from "react";
-import {GameInformations} from "./GameInformations.jsx";
+import {useContext, useEffect, useState} from "react";
 import {Cell} from "./Cell.jsx";
 import {useBuildings} from "../hooks/useBuildings.js";
+import { UserContext } from "../context/userContext.js";
 
-export const GameZone = ({user, setUser, addResources, usedResources}) => {
+export const GameZone = () => {
+    const {user, setUser, addResources} = useContext(UserContext)
+
     const rows = 21
     const cols = 29
     const center = {row: Math.ceil(rows / 2) - 1, col: Math.ceil(cols / 2) - 1}
@@ -73,10 +75,12 @@ export const GameZone = ({user, setUser, addResources, usedResources}) => {
             ])
         }
         addResources(-building.coinsCost, -building.energyCost)
-        console.log(building)
-        usedResources(building.coinsPerSecond, building.energyPerSecond)
 
         setBuildOnCell(null)
+    }
+
+    if(!user) {
+        return <div>loading</div>
     }
 
     return <>
@@ -89,10 +93,16 @@ export const GameZone = ({user, setUser, addResources, usedResources}) => {
                     {availableBuildings.map(option => {
                             return !option.hidden &&
                                 <li
-                                    onClick={() => handleChooseBuilding(option)}
+                                    
                                     key={option.name}
                                     style={{backgroundColor: `${option.buyable ? '#1555d8' : '#9f9f9f'}`}}
-                                >{option.name} ({option.coinsCost} coins / {option.energyCost} energy)
+                                >
+                                    <button
+                                        onClick={() => handleChooseBuilding(option)}
+                                        disabled={!option.buyable}
+                                    >
+                                        {option.name} ({option.coinsCost} coins / {option.energyCost} energy)
+                                    </button>
                                 </li>
                         }
                     )}
@@ -100,7 +110,7 @@ export const GameZone = ({user, setUser, addResources, usedResources}) => {
             </div>
         )}
         <div className="game_zone">
-            {gridWithBuildings.map((cell, index) => (
+            {gridWithBuildings.map((cell) => (
                 <Cell
                     key={`${cell.x}-${cell.y}`}
                     x={cell.x}

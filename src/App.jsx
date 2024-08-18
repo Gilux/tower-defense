@@ -1,22 +1,26 @@
 import {useCallback, useState} from 'react'
 import './App.css'
-import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Controls} from "./components/Controls.jsx";
 import {Home} from "./components/Home.jsx";
 import {Game} from "./components/Game.jsx";
 import {EndGame} from "./components/EndGame.jsx";
+import { UserContext } from './context/userContext.js';
 
 function App() {
-    const onAction = (energy, e,d) => {
-        console.log(energy, e, d)
-    }
-
     const [user, setUser] = useState({
-        speed : 1,
+        gameSpeed : 1,
         username : '',
         score: 0,
-        energy: 500,
-        coins: 500
+        energy: 100,
+        coins: 0
+    })
+
+    const setGameSpeed = useCallback((gameSpeed) => {
+        setUser((user) => ({
+            ...user,
+            gameSpeed
+        }))
     })
 
     const addResources = useCallback((coins, energy) => {
@@ -26,10 +30,6 @@ function App() {
             energy: currentUser.energy + energy,
         }))
     }, [user, setUser])
-
-    const usedResources = (coins, energy) => {
-        console.log(coins, energy)
-    }
 
     const router = createBrowserRouter([
         {
@@ -42,7 +42,7 @@ function App() {
                 },
                 {
                     path: 'game',
-                    element : <Game user={user} setUser={setUser} addResources={addResources} usedResources={usedResources}/>
+                    element : <Game />
                 },
                 {
                     path: 'end',
@@ -52,7 +52,10 @@ function App() {
         }
     ])
 
-  return <RouterProvider router={router} />
+  return <UserContext.Provider value={{user, setUser, addResources, setGameSpeed}}>
+      <RouterProvider router={router} />
+  </UserContext.Provider>
+
 }
 
 export default App

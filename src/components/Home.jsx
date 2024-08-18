@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import {useNavigate} from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
-export const Home = ({setUser}) => {
+export const Home = () => {
+    const {setUser} = useContext(UserContext)
     const navigate = useNavigate()
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         navigate('./game')
@@ -9,7 +13,7 @@ export const Home = ({setUser}) => {
 
     return <>
         <div className="home">
-            <h1>Caste Guard</h1>
+            <h1>Castle Guard</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     onChange={(e) => {

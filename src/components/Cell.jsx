@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import { Building } from "./Building";
 
 export const Cell = ({x, y, onBuildRequest, building}) => {
