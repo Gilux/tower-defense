@@ -4,7 +4,7 @@ import { UserContext } from "../context/userContext"
 import { useGameSpeed } from "../hooks/useGameSpeed"
 
 export const Building = ({ building }) => {
-    const [showDebugTicks] = useState(true)
+    const [showDebugTicks] = useState(false)
 
     const {allBuildings} = useBuildings()
     const currentBuilding = allBuildings.find((b) => b.name === building.name )
@@ -41,9 +41,14 @@ export const Building = ({ building }) => {
     }, [ticksBeforeUpdate, setTicksBeforeUpdate, generateResourcesTicks])
     return <div style={{position:'relative'}} className="img__building">
         <img src={currentBuilding.image} alt={currentBuilding.name} className={'img__building'}/>
+        <div className="healthBar">
+          <div className="inner" style={{width: `${building.hp * 100 / currentBuilding.hp}%`}}></div>
+          <span>{building.hp}</span>
+        </div>
         <span className="center"></span>
-        {showDebugTicks && (
+        {showDebugTicks && (<>
           <span style={{position: 'absolute', fontSize: '12px', top: '0', left: '0'}}>{ticksBeforeUpdate}</span>
+        </>
         )}
     </div>
 }

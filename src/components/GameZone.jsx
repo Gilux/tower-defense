@@ -8,7 +8,7 @@ import { useMonsters } from "../hooks/useMonsters.js";
 export const GameZone = () => {
     const {user, setUser, addResources} = useContext(UserContext)
 
-    const {buildingsNearMonster} = useMonsters()
+    const {buildingsNearMonster, buildingAdjacentToMonster} = useMonsters()
 
     const rows = 21
     const cols = 29
@@ -22,36 +22,18 @@ export const GameZone = () => {
             return {x, y}
         }));
 
+    const [monsters, setMonsters] = useState([
+        {id: 1, x: 0, y: 0, speed: 0.01, headingX: center.x, headingY: center.y},
+    ])
+
     const [buildings, setBuildings] = useState([
         {
             id: Date.now(),
             name: 'Wood Castle',
             x: center.x,
             y: center.y,
-            hp: 55,
+            hp: 60,
         },
-        {
-            id: Date.now(),
-            name: 'Longbow Tower',
-            x: 7,
-            y: 15,
-            hp: 55,
-        },
-        {
-            id: Date.now(),
-            name: 'Longbow Tower',
-            x: 20,
-            y: 5,
-            hp: 55,
-        },
-        {
-            id: Date.now(),
-            name: 'Longbow Tower',
-            x: 20,
-            y: 15,
-            hp: 55,
-        },
-        // TODO: uncomment
     ])
 
     const [gridWithBuildings, setGridWithBuildings] = useState([])
@@ -66,14 +48,7 @@ export const GameZone = () => {
         }))
     }, [grid, buildings])
 
-    const [monsters, setMonsters] = useState([
-        {id: 1, x: 0, y: 0, speed: 0.02, headingX: center.x, headingY: center.y},
-        {id: 2, x: 32, y: -2, speed: 0.03, headingX: center.x, headingY: center.y},
-        {id: 3, x: 4, y: 24, speed: 0.03, headingX: center.x, headingY: center.y},
-        {id: 4, x: 31, y: 0, speed: 0.04, headingX: center.x, headingY: center.y},
-        {id: 5, x: 29, y: 19, speed: 0.06, headingX: center.x, headingY: center.y},
-        {id: 6, x: 14, y: 22, speed: 0.02, headingX: center.x, headingY: center.y},
-    ])
+    
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -89,11 +64,11 @@ export const GameZone = () => {
                     headingY: center.y,
                 },
             ]);
-        }, 15000);
+        }, 5000);
     
         // Cleanup function to clear the interval when the component unmounts or re-renders
         return () => {
-            console.log('clean monsters interval');
+            // console.log('clean monsters interval');
             clearInterval(intervalId);
         };
     }, []); // Empty dependency array ensures this runs only once when the component mounts
@@ -101,7 +76,7 @@ export const GameZone = () => {
     
 
     useEffect(() => {
-        console.log("🚀 ~ buildings updated:", buildings);
+        // console.log("🚀 ~ buildings updated:", buildings);
     }, [buildings]);
     
     const moveMonster = useCallback((monsterId) => {
@@ -113,11 +88,17 @@ export const GameZone = () => {
         
                     // Get the latest version of buildings using a functional update
                     let { headingX, headingY } = monster;
+                    
+                    console.log("🚀 ~ returnprevMonsters.map ~ buildings:", buildings)
                     const buildingsNearby = buildingsNearMonster(monster, buildings);
+                    console.log("🚀 ~ returnprevMonsters.map ~ buildingsNearby:", buildingsNearby)
         
                     if (buildingsNearby.length >= 1) {
                         headingX = buildingsNearby[0].x;
                         headingY = buildingsNearby[0].y;
+                    } else {
+                        headingX = center.x
+                        headingY = center.y
                     }
         
                     const deltaX = monster.x - headingX;
@@ -143,7 +124,33 @@ export const GameZone = () => {
                 });
             });
         })
-    }, [buildings, buildingsNearMonster]);
+    }, [buildings]);
+
+    const attack = useCallback((monster) => {
+        const adjacentBuilding = buildingAdjacentToMonster(monster, buildings) ?? null
+        if(!adjacentBuilding) return
+
+        setBuildings((prevBuildings) => {
+            return prevBuildings.map((building) => {
+                if(building.id !== adjacentBuilding.id) return building
+
+                return {
+                    ...building,
+                    hp: building.hp - 1
+                };
+            });
+        })
+    }, [buildings, buildingAdjacentToMonster]);
+
+    // check for dead buildings
+    useEffect(() => {
+        buildings.forEach((building) => {
+            if(building.hp <= 0) {
+                console.log('building dead')
+                setBuildings((buildings) => buildings.filter((b) => b.id !== building.id ))
+            }
+        })
+    }, [buildings])
 
     const [buildOnCell, setBuildOnCell] = useState(false)
 
@@ -226,7 +233,8 @@ export const GameZone = () => {
             ))}
             </div>
             <div className="monsters">
-                {monsters.map((m) => <Monster key={m.id} monster={m} moveMonster={moveMonster} /> )}
+                <p>Monsters count : {monsters.length}</p>
+                {monsters.map((m) => <Monster key={m.id} monster={m} moveMonster={moveMonster} attack={attack} /> )}
             </div>
         </div>
 

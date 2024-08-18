@@ -12,7 +12,18 @@ export const useGameSpeed = (speed) => {
       if(speed === 2) return 15
     }, [speed])
 
+    // Returns the number of ticks a building has to wait before generating resources
+    const monsterAttackTicks = useMemo(() => {
+      if(!speed) {
+        console.warn('Unknown speed')
+        return 30
+      } 
+      if(speed === 1) return 30
+      if(speed === 2) return 15
+    }, [speed])
+
     return {
       generateResourcesTicks,
+      monsterAttackTicks
     }
 }
