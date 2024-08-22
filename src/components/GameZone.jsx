@@ -49,10 +49,12 @@ export const GameZone = () => {
     }, [grid, buildings])
 
     
+    const [monsterSpawnTime, setMonsterSpawnTime] = useState(5000)
 
     useEffect(() => {
+        console.log(monsterSpawnTime)
         const intervalId = setInterval(() => {
-            console.log('create new monster')
+            console.log('create monster')
             setMonsters((monsters) => [
                 ...monsters,
                 {
@@ -64,14 +66,16 @@ export const GameZone = () => {
                     headingY: center.y,
                 },
             ]);
-        }, 5000);
+            setMonsterSpawnTime((m) => m-20)
+        }, monsterSpawnTime);
+
     
         // Cleanup function to clear the interval when the component unmounts or re-renders
         return () => {
             // console.log('clean monsters interval');
             clearInterval(intervalId);
         };
-    }, []); // Empty dependency array ensures this runs only once when the component mounts
+    }, [monsterSpawnTime]); // Empty dependency array ensures this runs only once when the component mounts
 
     
 
@@ -89,9 +93,9 @@ export const GameZone = () => {
                     // Get the latest version of buildings using a functional update
                     let { headingX, headingY } = monster;
                     
-                    console.log("🚀 ~ returnprevMonsters.map ~ buildings:", buildings)
+                    // console.log("🚀 ~ returnprevMonsters.map ~ buildings:", buildings)
                     const buildingsNearby = buildingsNearMonster(monster, buildings);
-                    console.log("🚀 ~ returnprevMonsters.map ~ buildingsNearby:", buildingsNearby)
+                    // console.log("🚀 ~ returnprevMonsters.map ~ buildingsNearby:", buildingsNearby)
         
                     if (buildingsNearby.length >= 1) {
                         headingX = buildingsNearby[0].x;
